@@ -1,31 +1,327 @@
+
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Meri Website</title>
-  <style>
-    body {
-      background: #e8f4ff;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 40px 10px;
-    }
-    h1 { color: #0756a5; }
-    button {
-      background: #0756a5;
-      color: white;
-      padding: 12px 20px;
-      border: 0;
-      border-radius: 8px;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PR Calculator | Poorav</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  background: #020b19;
+  font-family: Arial, sans-serif;
+  color: white;
+}
+
+.calculator {
+  width: 100%;
+  max-width: 440px;
+  padding: 16px;
+  border: 3px solid #00dfff;
+  border-radius: 28px;
+  background: #061323;
+  box-shadow: 0 0 25px #00bfff88;
+}
+
+h1 {
+  text-align: center;
+  font-size: 27px;
+  margin: 8px 0 15px;
+  color: #00e5ff;
+}
+
+.signature {
+  text-align: center;
+  color: white;
+  font-style: italic;
+  font-size: 22px;
+  margin-bottom: 12px;
+}
+
+.display-box {
+  min-height: 190px;
+  border: 2px solid #287da5;
+  border-radius: 20px;
+  padding: 12px;
+  margin-bottom: 16px;
+  background: #03101f;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+#photoBox {
+  display: none;
+  text-align: center;
+}
+
+#photoBox img {
+  width: 100%;
+  max-height: 240px;
+  object-fit: contain;
+  border-radius: 12px;
+}
+
+#photoBox p {
+  color: #00e5ff;
+  font-size: 18px;
+}
+
+#display {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: white;
+  text-align: right;
+  font-size: clamp(28px, 9vw, 46px);
+  padding: 10px 2px;
+}
+
+#hint {
+  color: #00e5ff;
+  font-size: 13px;
+  text-align: right;
+  min-height: 18px;
+  overflow-wrap: anywhere;
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 9px;
+}
+
+button {
+  min-width: 0;
+  min-height: 61px;
+  border: 1px solid #6488ad;
+  border-radius: 15px;
+  background: linear-gradient(#263e58, #14263c);
+  color: white;
+  font-size: 25px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 3px 0 #091421;
+}
+
+button:active {
+  transform: scale(.96);
+}
+
+.pr {
+  background: #ffb900;
+  color: #07101c;
+  border-color: #ffe083;
+}
+
+.operator {
+  background: #007f98;
+  border-color: #00e5ff;
+}
+
+.equal {
+  background: #00bd70;
+  color: white;
+  grid-column: 4;
+  grid-row: 4 / span 2;
+  font-size: 36px;
+}
+
+.zero {
+  grid-column: span 2;
+}
+
+.poorav {
+  grid-column: span 2;
+  background: linear-gradient(135deg, #8a1bc0, #c026d3);
+  border-color: #e879ff;
+  font-size: 20px;
+}
+
+.back {
+  background: #075a83;
+  border-color: #00dfff;
+}
+
+</style>
 </head>
+
 <body>
-  <h1>Namaste Dosto!</h1>
-  <p>Yeh meri pehli website hai.</p>
-  <button onclick="alert('Website chal rahi hai!')">
-    Click Karo
-  </button>
+<div class="calculator">
+
+  <h1>👑 PR Calculator</h1>
+  <div class="signature">Poorav ✨</div>
+
+  <div class="display-box">
+
+    <div id="photoBox">
+      <img src="poorav.png" alt="Poorav ki photo">
+      <p>Dream Big... Keep Coding!</p>
+      <button onclick="hidePhoto()"
+        style="min-height:40px;font-size:16px">
+        Calculator पर वापस जाएँ
+      </button>
+    </div>
+
+    <div id="calcScreen">
+      <div id="hint">Dream Big... Keep Coding...</div>
+      <input id="display" value="0" readonly>
+    </div>
+
+  </div>
+
+  <div class="buttons" id="keypad">
+    <button class="pr" onclick="clearAll()">PR</button>
+    <button class="operator" onclick="operator('/')">÷</button>
+    <button class="operator" onclick="operator('*')">×</button>
+    <button class="back" onclick="backspace()">⌫</button>
+
+    <button onclick="digit('7')">7</button>
+    <button onclick="digit('8')">8</button>
+    <button onclick="digit('9')">9</button>
+    <button class="operator" onclick="operator('-')">−</button>
+
+    <button onclick="digit('4')">4</button>
+    <button onclick="digit('5')">5</button>
+    <button onclick="digit('6')">6</button>
+    <button class="operator" onclick="operator('+')">+</button>
+
+    <button onclick="digit('1')">1</button>
+    <button onclick="digit('2')">2</button>
+    <button onclick="digit('3')">3</button>
+    <button class="equal" onclick="calculate()">=</button>
+
+    <button class="zero" onclick="digit('0')">0</button>
+    <button onclick="decimal()">.</button>
+    <button class="poorav" onclick="showPhoto()">Poorav ❤️</button>
+  </div>
+
+</div>
+
+<script>
+const display = document.getElementById("display");
+const hint = document.getElementById("hint");
+
+let current = "0";
+let previous = null;
+let op = null;
+let fresh = true;
+
+function update() {
+  display.value = current;
+}
+
+function digit(n) {
+  hidePhoto();
+
+  if (fresh || current === "Error") {
+    current = n;
+    fresh = false;
+  } else if (current.length < 14) {
+    current = current === "0" ? n : current + n;
+  }
+
+  update();
+}
+
+function decimal() {
+  hidePhoto();
+
+  if (fresh || current === "Error") {
+    current = "0.";
+    fresh = false;
+  } else if (!current.includes(".") && current.length < 14) {
+    current += ".";
+  }
+
+  update();
+}
+
+function operator(symbol) {
+  hidePhoto();
+
+  if (current === "Error") clearAll();
+
+  if (op !== null && !fresh) calculate();
+
+  previous = Number(current);
+  op = symbol;
+  fresh = true;
+  hint.textContent = current + " " + symbol;
+}
+
+function calculate() {
+  hidePhoto();
+
+  if (op === null || previous === null) return;
+
+  const a = previous;
+  const b = Number(current);
+  let result;
+
+  if (op === "+") result = a + b;
+  if (op === "-") result = a - b;
+  if (op === "*") result = a * b;
+  if (op === "/") result = b === 0 ? "Error" : a / b;
+
+  if (typeof result === "number") {
+    current = String(Number(result.toPrecision(10)));
+  } else {
+    current = result;
+  }
+
+  previous = null;
+  op = null;
+  fresh = true;
+  hint.textContent = "Result";
+  update();
+}
+
+function clearAll() {
+  hidePhoto();
+  current = "0";
+  previous = null;
+  op = null;
+  fresh = true;
+  hint.textContent = "Dream Big... Keep Coding...";
+  update();
+}
+
+function backspace() {
+  hidePhoto();
+
+  if (fresh || current === "Error") {
+    current = "0";
+    fresh = false;
+  } else {
+    current = current.slice(0, -1) || "0";
+  }
+
+  update();
+}
+
+function showPhoto() {
+  document.getElementById("calcScreen").style.display = "none";
+  document.getElementById("photoBox").style.display = "block";
+  document.getElementById("keypad").style.display = "none";
+}
+
+function hidePhoto() {
+  document.getElementById("photoBox").style.display = "none";
+  document.getElementById("calcScreen").style.display = "block";
+  document.getElementById("keypad").style.display = "grid";
+}
+
+</script>
 </body>
 </html>
